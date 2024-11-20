@@ -1,17 +1,33 @@
-name: CI Workflow  # The name of the workflow.
+name: CI Workflow # The name of the workflow 
 
-on:
-  push:
+on: # Defines the events that trigger the workflow 
+  push: # Trigger the workflow on pushes to specific 
     branches:
-      - main  # Fixed missing space between - and branch name
-  pull_request:
+      - main 
+  pull_request: # Trigger the workflow on pull requests to specific branches 
     branches:
-      - main  # Fixed missing space between - and branch name
-
-jobs:
-  test:
+      - main
+jobs: 
+  test: # Name of the job 
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout code # Step to clone the repository 
+        uses: actions/checkout@v4 # Official action to fetch repository content 
+      
+      - name: Set up Python # Step to set up Python 
+        uses: actions/setup-python@v5 # Official action to install and configure 
+        
+        with: 
+          python-version: '3.12' # Specifies Python version to use
+
+      - name: Install Poetry # Step to install Poetry
+        run: pipx install poetry # Command to install Poetry using pipx
+        shell: bash # Specifies the shell to execute the command
+
+      - name: Install Dependencies # Step to install project dependencies 
+        run: poetry install # Command to install dependencies from pyproject.toml  
+
       # Changes Start Here
       - name: Run Tests  # Fixed missing space after - and name
         run: poetry run invoke test
